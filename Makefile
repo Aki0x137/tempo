@@ -5,6 +5,10 @@ help:  ## Display this help
 
 .DEFAULT_GOAL:=help
 
+.PHONY: update-version
+update-version:
+	@git describe --tags --abbrev=0 > VERSION
+
 # Version number
 VERSION=$(shell ./tools/image-tag | cut -d, -f 1)
 
