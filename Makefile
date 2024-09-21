@@ -5,9 +5,12 @@ help:  ## Display this help
 
 .DEFAULT_GOAL:=help
 
-.PHONY: update-version
+# Get the latest tag and store it in VERSION file
 update-version:
-	@git describe --tags --abbrev=0 > VERSION
+	@echo "Fetching the latest tag..."
+	@latest_tag=$$(git describe --tags `git rev-list --tags --max-count=1`); \
+	echo $$latest_tag > VERSION; \
+	echo "Updated VERSION file to $$latest_tag"
 
 # Version number
 VERSION=$(shell ./tools/image-tag | cut -d, -f 1)
