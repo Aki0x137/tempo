@@ -5,8 +5,13 @@ help:  ## Display this help
 
 .DEFAULT_GOAL:=help
 
+# Get the latest tag and store it in VERSION file
+update-version:
+	@latest_tag=$$(git describe --tags `git rev-list --tags --max-count=1`); \
+	echo $$latest_tag > VERSION; \
+
 # Version number
-VERSION=$(shell ./tools/image-tag | cut -d, -f 1)
+VERSION=$(shell cat VERSION)
 
 GIT_REVISION := $(shell git rev-parse --short HEAD)
 GIT_BRANCH := $(shell git rev-parse --abbrev-ref HEAD)
