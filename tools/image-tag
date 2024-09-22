@@ -4,6 +4,25 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+is_valid_semver() {
+      local version=$1
+      # regex taken from https://semver.org/
+      if [[ $version =~ ^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$ ]] ;then
+            return 0
+      else
+            return 1
+      fi
+}
+
+# Check if there is a VERSION file
+if [ -f VERSION ]; then
+      VERSION=$(cat VERSION)
+      if is_valid_semver "$VERSION"; then
+            echo "$VERSION"
+            exit 0
+      fi
+fi
+
 WIP=$(git diff --quiet || echo '-WIP')
 BRANCH=$(git rev-parse --abbrev-ref HEAD | sed 's#/#-#g')
 # When 7 chars are not enough to be unique, git automatically uses more.
