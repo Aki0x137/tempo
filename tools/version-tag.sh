@@ -16,13 +16,12 @@ is_valid_semver() {
       fi
 }
 
-# Check if there is a VERSION file
-if [ -f "${REPO_ROOT}/VERSION" ]; then
-      VERSION=$(cat "${REPO_ROOT}/VERSION" )
-      if is_valid_semver "$VERSION"; then
-            echo "$VERSION"
-            exit 0
-      fi
+
+VERSION=$(git describe --tags `git rev-list --tags --max-count=1`)
+if is_valid_semver "$VERSION"; then
+      echo "$VERSION"
+      exit 0
 fi
+
 
 source "${REPO_ROOT}/tools/image-tag"
