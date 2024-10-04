@@ -595,9 +595,7 @@ func CallBuildinfo(t *testing.T, svc *e2e.HTTPService) {
 
 	version, ok := jsonResponse["version"].(string)
 	require.True(t, ok)
-	// regex taken from https://semver.org/
-	semverRegex := `^v?(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`
-	require.Regexp(t, semverRegex, version)
+	require.Regexp(t, `^v?(\d+\.)?(\d+\.)?(\d+)$`, version)
 	defer res.Body.Close()
 }
 
